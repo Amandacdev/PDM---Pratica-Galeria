@@ -70,70 +70,81 @@ fun Greeting(texto1: String, texto2: String, modifier: Modifier = Modifier) {
     }
 }
 
+data class imagem(
+    val index: Int,
+    val texto1: String,
+    val texto2: String
+)
+
 @Composable
-fun GreetingImage(currentImageIndex: Int, modifier: Modifier = Modifier){
-    val images = listOf(
-        R.drawable.forest_56930_1280,
-        R.drawable.indonesia_4759317_1280,
-        R.drawable.red_river_hog_7378106_1280
+fun GreetingImage(modifier: Modifier = Modifier){
+    val imagens = listOf(
+        imagem(R.drawable.forest_56930_1280, "Forest in summer", "Unknown author (2024)"),
+        imagem(R.drawable.indonesia_4759317_1280, "Indonésia", "Fernanda L. (2021)"),
+        imagem(R.drawable.red_river_hog_7378106_1280, "Rio sob céu", "Luke P. (2023)")
     )
-    val image = painterResource(images[currentImageIndex])
+
+    var currentImageIndex by remember { mutableIntStateOf(0) }
+
+    val image = imagens[currentImageIndex]
 
     Box(
         modifier = Modifier
     ) {
-        Image(
-            painter = image,
-            contentDescription = null,
-            modifier = modifier
-                .padding(30.dp)
-        )
+
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Image(
+                painter = painterResource(id = image.index),
+                contentDescription = null,
+                modifier = modifier
+                    .padding(30.dp)
+            )
+            Greeting(texto1 = image.texto1, texto2 = image.texto2)
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Button(onClick = {
+                    if(currentImageIndex > 0){
+                        currentImageIndex -= 1
+                    }
+                    else{
+                        currentImageIndex = imagens.size - 1
+                    }
+                },
+                    modifier = Modifier.size(80.dp, 30.dp),
+                    contentPadding = PaddingValues(2.dp)
+                ) {
+                    Text(text = "Previous", fontSize = 8.sp)
+
+                }
+                Button(onClick = {
+                    if(currentImageIndex < imagens.size){
+                        currentImageIndex += 1
+                    }
+                    else{
+                        currentImageIndex = 0
+                    }
+                },
+                    modifier = Modifier.size(80.dp, 30.dp),
+                    contentPadding = PaddingValues(2.dp)) {
+                    Text(text = "Next", fontSize = 8.sp)
+                }
+            }
+        }
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     Pratica_galeriaTheme {
-
-        var currentImageIndex by remember {  mutableStateOf(0) }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp, 2.dp, 8.dp, 2.dp)
-        ){
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                GreetingImage(currentImageIndex = currentImageIndex)
-                Greeting("Forest in summer",
-                "Unknown author (2024)")
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                ) {
-                    Button(onClick = {
-                        if (currentImageIndex > 0) {
-                            currentImageIndex -= 1
-                        }
-                    },
-                        modifier = Modifier.size(80.dp, 30.dp),
-                        contentPadding = PaddingValues(2.dp)
-                    ) {
-                        Text(text = "Previous", fontSize = 8.sp)
-
-                    }
-                    Button(onClick = {
-                        currentImageIndex = (currentImageIndex + 1) % 3
-                    },
-                            modifier = Modifier.size(80.dp, 30.dp),
-                            contentPadding = PaddingValues(2.dp)) {
-                            Text(text = "Next", fontSize = 8.sp)
-                    }
-                }
-            }
-        }
+        GreetingImage()
     }
 }
