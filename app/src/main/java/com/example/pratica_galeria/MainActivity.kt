@@ -70,7 +70,7 @@ fun Greeting(texto1: String, texto2: String, modifier: Modifier = Modifier) {
     }
 }
 
-data class imagem(
+data class Imagem(
     val index: Int,
     val texto1: String,
     val texto2: String
@@ -79,9 +79,9 @@ data class imagem(
 @Composable
 fun GreetingImage(modifier: Modifier = Modifier){
     val imagens = listOf(
-        imagem(R.drawable.forest_56930_1280, "Forest in summer", "Unknown author (2024)"),
-        imagem(R.drawable.indonesia_4759317_1280, "Indonésia", "Fernanda L. (2021)"),
-        imagem(R.drawable.red_river_hog_7378106_1280, "Rio sob céu", "Luke P. (2023)")
+        Imagem(R.drawable.forest_56930_1280, "Forest in summer", "Unknown author (2024)"),
+        Imagem(R.drawable.indonesia_4759317_1280, "Indonésia", "Fernanda L. (2021)"),
+        Imagem(R.drawable.red_river_hog_7378106_1280, "Rio sob céu", "Luke P. (2023)")
     )
 
     var currentImageIndex by remember { mutableIntStateOf(0) }
@@ -123,7 +123,7 @@ fun GreetingImage(modifier: Modifier = Modifier){
 
                 }
                 Button(onClick = {
-                    if(currentImageIndex < imagens.size){
+                    if(currentImageIndex < imagens.size - 1){
                         currentImageIndex += 1
                     }
                     else{
